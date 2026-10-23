@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#ffe8f1">
+<title>A Little Surprise for Akka 🤍</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh; padding: 22px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: -apple-system, BlinkMacSystemFont, "Trebuchet MS", sans-serif;
+    color: #78465f;
+    background: linear-gradient(145deg, #ffe1ed, #fff6fa 55%, #fff0ce);
+    overflow-x: hidden;
+  }
+  .card {
+    width: 100%; max-width: 440px; padding: 28px 22px;
+    text-align: center; border-radius: 30px;
+    background: rgba(255,255,255,.86);
+    border: 2px solid rgba(255,255,255,.95);
+    box-shadow: 0 16px 45px rgba(190,91,139,.16);
+    position: relative; z-index: 1;
+  }
+  .ribbon { font-size: 27px; letter-spacing: 7px; }
+  h1 { color: #e65391; line-height: 1.25; margin: 12px 0; font-size: 29px; }
+  .intro { line-height: 1.7; font-size: 15px; margin: 12px 0; }
+  .gift {
+    display: block; margin: 10px auto; padding: 8px;
+    border: 0; background: transparent; font-size: 105px; line-height: 1.35;
+    cursor: pointer; touch-action: manipulation;
+    animation: bounce 1.5s ease-in-out infinite;
+  }
+  .gift:focus-visible, .again:focus-visible { outline: 3px solid #a53b75; outline-offset: 4px; }
+  .tap { color: #b56a91; font-size: 14px; animation: pulse 1.6s infinite; }
+  #surprise { display: none; animation: appear .8s ease both; }
+  .cake { font-size: 48px; margin: 8px 0 14px; }
+  .wish { font-size: 17px; line-height: 1.9; margin: 20px 0; }
+  .sinhala { font-size: 19px; font-weight: 750; color: #df528d; margin-top: 18px; }
+  .decor { font-size: 27px; line-height: 2; overflow-wrap: anywhere; }
+  .again {
+    border: 0; border-radius: 999px; background: #e85d9e; color: white;
+    padding: 13px 21px; margin-top: 15px; font-size: 15px; font-weight: 700;
+    cursor: pointer; touch-action: manipulation;
+  }
+  .footer { margin-top: 22px; color: #ad7a96; font-size: 12px; }
+  .floaty { position: fixed; bottom: -40px; z-index: 3; pointer-events: none; animation: floatUp 5s linear forwards; }
+  .confetti { position: fixed; top: -30px; z-index: 3; pointer-events: none; animation: fall 3.2s linear forwards; }
+  @keyframes bounce { 0%,100% { transform: translateY(0) rotate(-3deg); } 50% { transform: translateY(-11px) rotate(3deg); } }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .55; } }
+  @keyframes appear { from { opacity: 0; transform: translateY(14px) scale(.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
+  @keyframes floatUp { to { transform: translateY(-115vh) rotate(360deg); opacity: 0; } }
+  @keyframes fall { to { transform: translateY(115vh) rotate(650deg); opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
+  }
+</style>
+</head>
+<body>
+<main class="card">
+  <div class="ribbon">🎀 🤍 🎀</div>
+  <section id="intro">
+    <p class="intro">Someone has a little surprise for you... 🥹💗</p>
+    <h1>Hey, Akka! 🎀</h1>
+    <button class="gift" id="giftButton" type="button" aria-label="Open your birthday gift">🎁</button>
+    <p class="tap">Tap the gift to open it! 👆💗</p>
+  </section>
+
+  <section id="surprise" aria-live="polite">
+    <div class="cake">🎂🥳🤍</div>
+    <h1>Happy birthday<br>akkaaa! 🥳🎂🤍</h1>
+    <div class="wish">
+      Wishing you endless happiness and success in every tiny bit of your life🥹🫶
+      <div class="sinhala" lang="si">හැමදාම හිනාවෙලා ඉන්න!!🤍</div>
+    </div>
+    <div class="decor" aria-hidden="true">🎉 💗 🌸 🧁 🦋 💝 🎈</div>
+    <p class="intro">Hope your day is filled with happiness and beautiful memories! 🫶</p>
+    <button class="again" id="againButton" type="button">Celebrate again! 🎉</button>
+  </section>
+  <div class="footer">A little birthday surprise made with 🤍</div>
+</main>
+<script>
+(() => {
+  const intro = document.getElementById('intro');
+  const surprise = document.getElementById('surprise');
+  const giftButton = document.getElementById('giftButton');
+  const againButton = document.getElementById('againButton');
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function scatter(className, symbols, count, duration) {
+    if (reducedMotion) return;
+    for (let i = 0; i < count; i++) {
+      window.setTimeout(() => {
+        const item = document.createElement('span');
+        item.className = className;
+        item.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+        item.style.left = Math.random() * 100 + 'vw';
+        item.style.fontSize = (16 + Math.random() * 18) + 'px';
+        item.style.animationDuration = (duration + Math.random() * 1.8) + 's';
+        document.body.appendChild(item);
+        window.setTimeout(() => item.remove(), (duration + 2.2) * 1000);
+      }, i * 65);
+    }
+  }
+  function openGift() {
+    intro.style.display = 'none';
+    surprise.style.display = 'block';
+    scatter('floaty', ['💗','💕','🤍','💖','🎀','🌸'], 22, 3);
+    scatter('confetti', ['🎉','✨','💗','🎊','🌸','🤍'], 34, 2);
+  }
+  function resetGift() {
+    surprise.style.display = 'none';
+    intro.style.display = 'block';
+  }
+  giftButton.addEventListener('click', openGift);
+  againButton.addEventListener('click', resetGift);
+})();
+</script>
+</body>
+</html>
